@@ -24,7 +24,6 @@ class OC_Request {
 			or ($type !== 'protocol' and OC_Config::getValue('forcessl', false));
 	}
 
-
 	/**
 	 * @brief Checks whether a domain is considered as trusted. This is used to prevent Host Header Poisoning.
 	 * @param string $host
@@ -74,7 +73,6 @@ class OC_Request {
 			return \OC_Config::getValue('trusted_domains', "")[0];
 		}
 	}
-
 
 	/**
 	* @brief Returns the server protocol
