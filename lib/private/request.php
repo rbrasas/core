@@ -70,7 +70,8 @@ class OC_Request {
 		if(self::isTrustedDomain($host) || \OC_Config::getValue('trusted_domains', "") === "") {
 			return $host;
 		} else {
-			return \OC_Config::getValue('trusted_domains', "")[0];
+			$trustedList = \OC_Config::getValue('trusted_domains', array(''));
+			return $trustedList[0];
 		}
 	}
 
