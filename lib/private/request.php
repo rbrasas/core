@@ -24,6 +24,17 @@ class OC_Request {
 			or ($type !== 'protocol' and OC_Config::getValue('forcessl', false));
 	}
 
+
+	/**
+	 * @brief Checks whether a domain is considered as trusted. This is used to prevent Host Header Poisoning.
+	 * @param string $host
+	 * @return bool
+	 */
+	public static function isTrustedDomain($domain) {
+		$trustedList = \OC_Config::getValue('trusted_domains', array(''));
+		return in_array($domain, $trustedList);
+	}
+
 	/**
 	 * @brief Returns the server host
 	 * @returns string the server host
@@ -43,19 +54,25 @@ class OC_Request {
 				$host = trim(array_pop(explode(",", $_SERVER['HTTP_X_FORWARDED_HOST'])));
 			}
 			else{
-				$host=$_SERVER['HTTP_X_FORWARDED_HOST'];
+				$host = $_SERVER['HTTP_X_FORWARDED_HOST'];
 			}
-		}
-		else{
+		} else {
 			if (isset($_SERVER['HTTP_HOST'])) {
-				return $_SERVER['HTTP_HOST'];
+				$host = $_SERVER['HTTP_HOST'];
 			}
 			if (isset($_SERVER['SERVER_NAME'])) {
-				return $_SERVER['SERVER_NAME'];
+				$host = $_SERVER['SERVER_NAME'];
 			}
-			return 'localhost';
 		}
-		return $host;
+
+		// Verify that the host is a trusted domain if the trusted domains
+		// are defined
+		// If no trusted domain is provided the first trusted domain is returned
+		if(self::isTrustedDomain($host) || \OC_Config::getValue('trusted_domains', "") === "") {
+			return $host;
+		} else {
+			return \OC_Config::getValue('trusted_domains', "")[0];
+		}
 	}
 
 
@@ -69,7 +86,7 @@ class OC_Request {
 		if(OC_Config::getValue('overwriteprotocol', '') !== '' and self::isOverwriteCondition('protocol')) {
 			return OC_Config::getValue('overwriteprotocol');
 		}
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && isTrustedForwarder($_SERVER['REMOTE_ADDR'])) {
 			$proto = strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']);
 		}else{
 			if(isset($_SERVER['HTTPS']) and !empty($_SERVER['HTTPS']) and ($_SERVER['HTTPS']!='off')) {
@@ -77,6 +94,12 @@ class OC_Request {
 			}else{
 				$proto = 'http';
 			}
+		}
+
+		// Verify that the protocol is always HTTP or HTTPS
+		// default to http if an invalid value is provided
+		if($proto != "http" || $proto != "https") {
+				$proto = 'http';
 		}
 		return $proto;
 	}

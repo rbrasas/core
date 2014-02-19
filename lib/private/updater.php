@@ -109,8 +109,7 @@ class Updater extends BasicEmitter {
 		if (version_compare($currentVersion, '6.90.1', '<')) {
 			// Add the overwriteHost config if it is not existant
 			// This is added to prevent host header poisoning
-			$host = \OC_Config::getValue('overwritehost', \OC_Request::serverHost());
-			\OC_Config::setValue('overwritehost',  $host);
+			\OC_Config::setValue('trusted_domains', \OC_Config::getValue('trusted_domains', \OC_Request::serverHost())); 
 		}
 		/*
 		 * STOP CONFIG CHANGES FOR OLDER VERSIONS
