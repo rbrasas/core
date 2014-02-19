@@ -96,8 +96,8 @@ class OC_Request {
 
 		// Verify that the protocol is always HTTP or HTTPS
 		// default to http if an invalid value is provided
-		if($proto != "http" || $proto != "https") {
-				$proto = 'http';
+		if($proto != "http" && $proto != "https") {
+			$proto = 'http';
 		}
 		return $proto;
 	}
