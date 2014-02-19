@@ -43,6 +43,20 @@ $(document).ready(function(){
 		}
 	});
 
+	$('#mail_smtpmode').change(function() {
+		if ($(this).val() != 'smtp') {
+			$('#setting_smtpauth').toggle(false);
+			$('#setting_smtphost').toggle(false);
+			$('#setting_smtpsecure').toggle(false);
+			$('#mail_credentials').toggle(false);
+		} else {
+			$('#setting_smtpauth').toggle(true);
+			$('#setting_smtphost').toggle(true);
+			$('#setting_smtpsecure').toggle(true);
+			$('#mail_credentials').toggle(true);
+		}
+	});
+
 	$('#mail_settings').change(function(){
 		OC.msg.startSaving('#mail_settings .msg');
 		var post = $( "#mail_settings" ).serialize();
