@@ -86,20 +86,14 @@ class OC_Request {
 		}
 		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 			$proto = strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']);
-		}else{
-			if(isset($_SERVER['HTTPS']) and !empty($_SERVER['HTTPS']) and ($_SERVER['HTTPS']!='off')) {
-				$proto = 'https';
-			}else{
-				$proto = 'http';
-			}
+			// Verify that the protocol is always HTTP or HTTPS
+			// default to http if an invalid value is provided
+			return $proto === 'https' ? 'https' : 'http';
 		}
-
-		// Verify that the protocol is always HTTP or HTTPS
-		// default to http if an invalid value is provided
-		if($proto != "http" && $proto != "https") {
-			$proto = 'http';
+		if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+			return 'https';
 		}
-		return $proto;
+		return 'http';
 	}
 
 	/**
