@@ -56,7 +56,6 @@ $CONFIG = array(
 /* List of trusted domains, to prevent host header poisoning ownCloud is only using this Host headers */
 'trusted_domains' => array(0 => 'demo.owncloud.org'),
 
-
 /* Theme to use for ownCloud */
 "theme" => "",
 
