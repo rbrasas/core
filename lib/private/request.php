@@ -86,7 +86,7 @@ class OC_Request {
 		if(OC_Config::getValue('overwriteprotocol', '') !== '' and self::isOverwriteCondition('protocol')) {
 			return OC_Config::getValue('overwriteprotocol');
 		}
-		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && isTrustedForwarder($_SERVER['REMOTE_ADDR'])) {
+		if (isset($_SERVER['HTTP_X_FORWARDED_PROTO'])) {
 			$proto = strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']);
 		}else{
 			if(isset($_SERVER['HTTPS']) and !empty($_SERVER['HTTPS']) and ($_SERVER['HTTPS']!='off')) {
