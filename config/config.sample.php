@@ -53,7 +53,7 @@ $CONFIG = array(
 /* The optional authentication for the proxy to use to connect to the internet. The format is: [username]:[password] */
 "proxyuserpwd" => "",
 
-/* List of trusted domains, to prevent host header poisoning ownCloud is only using this Host headers */
+/* List of trusted domains, to prevent host header poisoning ownCloud is only using these Host headers */
 'trusted_domains' => array('demo.owncloud.org'),
 
 /* Theme to use for ownCloud */
