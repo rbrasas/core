@@ -7,14 +7,15 @@
  *
  */
 class OC_NaturalSort {
-	private static $collator;
+	private static $instance;
+	private $collator;
 
 	/**
 	 * Split the given string in chunks of numbers and strings
 	 * @param string $t string
 	 * @return array of strings and number chunks
 	 */
-	private static function naturalSortChunkify($t) {
+	private function naturalSortChunkify($t) {
 		// Adapted and ported to PHP from
 		// http://my.opera.com/GreyWyvern/blog/show.dml/1671288
 		$tz = array();
@@ -42,13 +43,13 @@ class OC_NaturalSort {
 	 * Returns the string collator
 	 * @return Collator string collator
 	 */
-	private static function getCollator() {
-		if (!isset(self::$collator)) {
+	private function getCollator() {
+		if (!isset($this->collator)) {
 			// looks like the default is en_US_POSIX which yields wrong sorting with
 			// German umlauts, so using en_US instead
-			self::$collator = new Collator('en_US');
+			$this->collator = new Collator('en_US');
 		}
-		return self::$collator;
+		return $this->collator;
 	}
 
 	/**
@@ -58,7 +59,7 @@ class OC_NaturalSort {
 	 * @return -1 if $b comes before $a, 1 if $a comes before $b
 	 * or 0 if the strings are identical
 	 */
-	public static function compare($a, $b) {
+	public function compare($a, $b) {
 		// Needed because PHP doesn't sort correctly when numbers are enclosed in
 		// parenthesis, even with NUMERIC_COLLATION enabled.
 		// For example it gave ["test (2).txt", "test.txt"]
@@ -81,6 +82,17 @@ class OC_NaturalSort {
 			}
 		}
 		return $alen - $blen;
+	}
+
+	/**
+	 * Returns a singleton
+	 * @return \OC_NaturalSort instance
+	 */
+	public static function getInstance() {
+		if (!isset(self::$instance)) {
+			self::$instance = new OC_NaturalSort();
+		}
+		return self::$instance;
 	}
 }
 

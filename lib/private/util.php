@@ -1185,6 +1185,6 @@ class OC_Util {
 	 * or 0 if the strings are identical
 	 */
 	public static function naturalSortCompare($a, $b) {
-		return OC_NaturalSort::compare($a, $b);
+		return OC_NaturalSort::getInstance()->compare($a, $b);
 	}
 }
